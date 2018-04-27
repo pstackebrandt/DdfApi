@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DdfApi
 {
@@ -12,8 +13,14 @@ namespace DdfApi
         {
             var webhost = new WebHostBuilder()
                 .UseKestrel()
-                .Configure(app => { app.Use((context, next)
-                    => context.Response.WriteAsync("Hello World!"));
+                .ConfigureServices(services =>
+                {
+                    services.AddMvc();
+                })
+                .Configure(app => 
+                {
+                    app.Use((context, next)
+                        => context.Response.WriteAsync("Hello World!"));
                 })
                 .Build();
             webhost.Run();
